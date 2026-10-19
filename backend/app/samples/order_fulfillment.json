@@ -1,0 +1,89 @@
+{
+  "workflow_id": "wf_order_fulfillment_v1",
+  "name": "Standard E-Commerce Order Fulfillment",
+  "description": "End-to-end processing pipeline from order placement to customer delivery",
+  "nodes": [
+    {
+      "id": "step_1",
+      "label": "Receive Order",
+      "owner": "system_gateway",
+      "action_type": "automated",
+      "reversible": true,
+      "description": "Customer submits cart; validate order payload and inventory availability."
+    },
+    {
+      "id": "step_2",
+      "label": "Authorize Payment",
+      "owner": "billing_service",
+      "action_type": "automated",
+      "reversible": false,
+      "description": "Trigger merchant payment gateway capture call."
+    },
+    {
+      "id": "step_3",
+      "label": "Allocate Inventory",
+      "owner": "warehouse_bot",
+      "action_type": "automated",
+      "reversible": true,
+      "description": "Reserve SKU quantities in warehouse database."
+    },
+    {
+      "id": "step_4",
+      "label": "Generate Pick List",
+      "owner": null,
+      "action_type": "manual",
+      "reversible": true,
+      "description": "Create itemized PDF picking sheet from warehouse rack locations."
+    },
+    {
+      "id": "step_5",
+      "label": "Item Pick & Pack",
+      "owner": "john_warehouse_operator",
+      "action_type": "manual",
+      "reversible": false,
+      "description": "Pick physical items, wrap in protective bubble mailer, affix thermal box barcode."
+    },
+    {
+      "id": "step_6",
+      "label": "Physical Dispatch & Carrier Handover",
+      "owner": "john_warehouse_operator",
+      "action_type": "physical",
+      "reversible": false,
+      "description": "Load sealed cartons onto outgoing 3PL commercial trailer without supervisor sign-off."
+    },
+    {
+      "id": "step_7",
+      "label": "Transit & Fleet Tracking",
+      "owner": "courier_3pl",
+      "action_type": "external",
+      "reversible": false,
+      "description": "Monitor third-party telemetry milestones."
+    },
+    {
+      "id": "step_8",
+      "label": "Final Mile Delivery",
+      "owner": "delivery_agent",
+      "action_type": "physical",
+      "reversible": false,
+      "description": "Doorstep delivery and capture recipient OTP."
+    },
+    {
+      "id": "step_9",
+      "label": "Archive & Close Order",
+      "owner": "erp_sync_service",
+      "action_type": "automated",
+      "reversible": true,
+      "description": "Mark order fulfilled in master accounting ledger."
+    }
+  ],
+  "edges": [
+    { "from": "step_1", "to": "step_2", "condition": "payload_valid" },
+    { "from": "step_2", "to": "step_3", "condition": "payment_approved" },
+    { "from": "step_3", "to": "step_4", "condition": "inventory_reserved" },
+    { "from": "step_4", "to": "step_5", "condition": "pick_list_ready" },
+    { "from": "step_5", "to": "step_6", "condition": "packed" },
+    { "from": "step_6", "to": "step_7", "condition": "carrier_scanned" },
+    { "from": "step_7", "to": "step_8", "condition": "arrived_at_hub" },
+    { "from": "step_8", "to": "step_9", "condition": "otp_verified" }
+  ]
+}

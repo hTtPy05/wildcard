@@ -1,0 +1,673 @@
+{
+  "startup_prd": {
+    "project_model": {
+      "goals": [
+        {
+          "text": "Achieve 1,000 daily orders within 6 weeks of launch across campus dormitories.",
+          "source": { "quote": "achieving 1,000 daily orders within the first 6 weeks of launch across North and South Campus dormitories", "start_offset": 450, "end_offset": 555 }
+        },
+        {
+          "text": "Deliver hot fresh meals to dorm rooms within a strict 20-minute SLA.",
+          "source": { "quote": "hot, fresh meals delivered to student dorm rooms within an aggressive delivery SLA of 20 minutes", "start_offset": 310, "end_offset": 405 }
+        }
+      ],
+      "stakeholders": [
+        {
+          "text": "12,000 undergraduate and graduate dorm students.",
+          "source": { "quote": "12,000 undergraduate and graduate students living across 8 residential dormitories", "start_offset": 620, "end_offset": 705 }
+        },
+        {
+          "text": "Campus cafeteria and commercial eateries along University Avenue.",
+          "source": { "quote": "Campus cafeteria and local commercial eateries situated along University Avenue", "start_offset": 720, "end_offset": 800 }
+        },
+        {
+          "text": "2 full-time student couriers on electric bicycles.",
+          "source": { "quote": "dedicated student-courier fleet comprising exactly 2 full-time student delivery partners operating electric bicycles", "start_offset": 830, "end_offset": 945 }
+        }
+      ],
+      "features": [
+        {
+          "text": "Dynamic live menus with instant item customisation.",
+          "source": { "quote": "Dynamic live menus showing partner offerings with instant item customisation", "start_offset": 1400, "end_offset": 1475 }
+        },
+        {
+          "text": "Continuous background GPS location tracking.",
+          "source": { "quote": "continuously pings and records high-frequency GPS coordinates from the customer's phone in the background", "start_offset": 1680, "end_offset": 1785 }
+        }
+      ],
+      "stated_assumptions": [
+        {
+          "text": "Transit times between any two campus points remain under 5 minutes.",
+          "source": { "quote": "concentration of student dorms ensures transit times between any two campus points remain under 5 minutes", "start_offset": 1950, "end_offset": 2055 }
+        },
+        {
+          "text": "All cafeteria stalls will package orders within 7 minutes.",
+          "source": { "quote": "All cafeteria stalls will package orders within 7 minutes of digital receipt", "start_offset": 2080, "end_offset": 2155 }
+        },
+        {
+          "text": "All student UPI transactions clear instantly via webhooks.",
+          "source": { "quote": "All student UPI transactions will clear instantly via gateway webhooks", "start_offset": 2180, "end_offset": 2250 }
+        }
+      ],
+      "stated_constraints": [
+        {
+          "text": "Motorized scooters prohibited; deliveries rely exclusively on 2 electric bicycles.",
+          "source": { "quote": "Motorized scooters and cars are prohibited inside the pedestrian central quad; deliveries must rely exclusively on the 2 electric bicycle couriers", "start_offset": 2350, "end_offset": 2495 }
+        },
+        {
+          "text": "Dorm gates locked at 11:00 PM nightly.",
+          "source": { "quote": "Curfew locks dorm exterior gates at 11:00 PM nightly", "start_offset": 2520, "end_offset": 2570 }
+        }
+      ],
+      "dependencies": [
+        {
+          "text": "Google Maps Distance Matrix and Geocoding APIs at pay-as-you-go rates.",
+          "source": { "quote": "Google Maps Platform Distance Matrix and Geocoding APIs at enterprise pay-as-you-go rates", "start_offset": 1250, "end_offset": 1340 }
+        }
+      ],
+      "timeline": [
+        {
+          "text": "Strict 3-month launch timeline.",
+          "source": { "quote": "Strictly 3 months to production readiness", "start_offset": 1180, "end_offset": 1222 }
+        }
+      ],
+      "budget": [
+        {
+          "text": "Total development and runway budget of ₹2,00,000 (2 Lakh Rupees).",
+          "source": { "quote": "Total Development & Operational Runway Budget: ₹2,00,000 (2 Lakh Rupees) all-inclusive", "start_offset": 1050, "end_offset": 1135 }
+        }
+      ],
+      "risks": []
+    },
+    "findings": [
+      {
+        "type": "contradiction",
+        "title": "Throughput Infeasibility: 20-Min SLA vs 2 Couriers for 1,000 Orders",
+        "explanation": "Targeting 1,000 daily orders within a 12-hour window requires delivering ~83 orders per hour. With exactly 2 student bicycle couriers, each courier must execute a full kitchen pickup, navigation, and dorm delivery every 86 seconds. This is mathematically and physically impossible.",
+        "why_it_matters": "Orders will rapidly backlog, food will arrive cold or spoiled, and the brand will violate its headline 20-minute guarantee on day one.",
+        "evidence": [
+          {
+            "kind": "text_span",
+            "locator": "offset:310-405",
+            "excerpt": "aggressive delivery SLA of 20 minutes from the moment payment completes",
+            "detail": "Promised delivery duration under 20 minutes"
+          },
+          {
+            "kind": "text_span",
+            "locator": "offset:830-945",
+            "excerpt": "dedicated student-courier fleet comprising exactly 2 full-time student delivery partners",
+            "detail": "Courier headcount strictly capped at 2 student couriers"
+          }
+        ],
+        "sub_scores": {
+          "severity": 0.95,
+          "likelihood": 0.95,
+          "breadth": 0.90,
+          "irreversibility": 0.70,
+          "time_sensitivity": 0.90,
+          "justifications": {
+            "severity": "Guarantees immediate operational failure and widespread SLA breach.",
+            "likelihood": "Mathematical certainty given order volume and speed limits.",
+            "breadth": "Impacts all 1,000 prospective daily customer orders.",
+            "irreversibility": "Requires fundamental restructuring of courier logistics.",
+            "time_sensitivity": "Must be addressed before marketing the 20-min promise."
+          }
+        },
+        "recommendations": [
+          { "action": "Scale the initial courier pool to at least 14-18 couriers for peak lunch/dinner rushes.", "effort": "high" },
+          { "action": "Increase the launch delivery SLA to 35-40 minutes to reflect real campus pedestrian logistics.", "effort": "low" }
+        ],
+        "questions": [
+          "How many simultaneous orders can one electric bicycle carry safely across dorm pathways?",
+          "What will the customer app display when both couriers are out on delivery and new orders arrive?"
+        ]
+      },
+      {
+        "type": "missing_assumption",
+        "title": "Zero Handling for Payment Failures, Gateway Timeouts, or Refunds",
+        "explanation": "The PRD assumes all UPI transactions succeed instantly and transitions directly from payment to 'In Kitchen'. It outlines no state machine, webhook retry logic, or customer refund workflow for gateway drops or inventory stockouts after payment capture.",
+        "why_it_matters": "UPI networks experience 2-4% timeout rates. Without refund or reconciliation protocols, students will be debited for undelivered food, generating rapid chargeback friction.",
+        "evidence": [
+          {
+            "kind": "text_span",
+            "locator": "offset:2180-2250",
+            "excerpt": "All student UPI transactions will clear instantly via gateway webhooks",
+            "detail": "Stated assumption presumes 100% instant UPI clearing with zero failure states"
+          },
+          {
+            "kind": "text_span",
+            "locator": "offset:1520-1650",
+            "excerpt": "Once payment succeeds, the order status immediately transitions to 'In Kitchen' and the 20-minute countdown timer begins",
+            "detail": "No failure, timeout, or cancellation transition defined"
+          }
+        ],
+        "sub_scores": {
+          "severity": 0.85,
+          "likelihood": 0.90,
+          "breadth": 0.75,
+          "irreversibility": 0.65,
+          "time_sensitivity": 0.85,
+          "justifications": {
+            "severity": "Loss of student money without food leads to campus regulatory scrutiny.",
+            "likelihood": "UPI edge failures are standard operational occurrences.",
+            "breadth": "Affects any user undergoing mobile network drops during UPI pin entry.",
+            "irreversibility": "Manual bank refunds require extensive accounting hours.",
+            "time_sensitivity": "Must be built before live money is accepted."
+          }
+        },
+        "recommendations": [
+          { "action": "Define an explicit 'Payment Pending' webhook verification state with a 5-minute timeout.", "effort": "medium" },
+          { "action": "Integrate automated instant refund API via payment aggregator for failed kitchen confirmations.", "effort": "medium" }
+        ],
+        "questions": [
+          "If a student's bank account is debited but the merchant app is offline, how is the student refunded?",
+          "Who handles billing dispute inquiries when students demand immediate reimbursement?"
+        ]
+      },
+      {
+        "type": "overlooked_constraint",
+        "title": "Severe Privacy and Consent Violations in Background Location Tracking",
+        "explanation": "The app continuously harvests high-frequency GPS coordinates in the background without explicit student consent disclosures, purpose limitation, or battery impact analysis. Continuous background tracking violates iOS/Android App Store review policies and DPDP Act provisions.",
+        "why_it_matters": "Both Apple App Store and Google Play reject apps requesting continuous background geolocation without clear driver/navigation necessity. Unauthorized location harvesting also creates legal liability.",
+        "evidence": [
+          {
+            "kind": "text_span",
+            "locator": "offset:1680-1785",
+            "excerpt": "continuously pings and records high-frequency GPS coordinates from the customer's phone in the background to pinpoint exact dorm stairwells",
+            "detail": "App records consumer coordinates in background without consent gates"
+          }
+        ],
+        "sub_scores": {
+          "severity": 0.90,
+          "likelihood": 0.95,
+          "breadth": 0.85,
+          "irreversibility": 0.80,
+          "time_sensitivity": 0.90,
+          "justifications": {
+            "severity": "App Store rejection and statutory privacy penalties under DPDP.",
+            "likelihood": "Automated App Store static analyzers immediately flag background GPS.",
+            "breadth": "Applies to 100% of student mobile installations.",
+            "irreversibility": "App rejection halts launch completely until resubmission.",
+            "time_sensitivity": "Blocks mobile app distribution."
+          }
+        },
+        "recommendations": [
+          { "action": "Remove background GPS tracking; use foreground geolocation during checkout with manual dorm/room selector dropdowns.", "effort": "low" },
+          { "action": "Publish an explicit Privacy Policy with clear student location data retention limits.", "effort": "low" }
+        ],
+        "questions": [
+          "Why is background tracking required if students can select their dorm building and room number from a list?",
+          "How will the team satisfy Google Play and Apple App Store background location justification audits?"
+        ]
+      },
+      {
+        "type": "contradiction",
+        "title": "Budget Collapse: ₹2 Lakh Runway vs Paid Map APIs & 3-Month Build",
+        "explanation": "A total budget of ₹2,00,000 ($2,400) cannot sustain 3 months of engineering, cloud hosting, and enterprise Google Maps API bills. Distance Matrix and Geocoding APIs charging per 1,000 calls will exhaust the entire budget within weeks under active tracking pings.",
+        "why_it_matters": "The venture will suffer capital exhaustion before launch, leaving engineers unpaid and third-party API accounts suspended.",
+        "evidence": [
+          {
+            "kind": "text_span",
+            "locator": "offset:1050-1135",
+            "excerpt": "Total Development & Operational Runway Budget: ₹2,00,000 (2 Lakh Rupees) all-inclusive",
+            "detail": "Capped total runway budget"
+          },
+          {
+            "kind": "text_span",
+            "locator": "offset:1250-1340",
+            "excerpt": "Google Maps Platform Distance Matrix and Geocoding APIs at enterprise pay-as-you-go rates",
+            "detail": "Variable consumption-based commercial API rates"
+          }
+        ],
+        "sub_scores": {
+          "severity": 0.85,
+          "likelihood": 0.90,
+          "breadth": 0.80,
+          "irreversibility": 0.75,
+          "time_sensitivity": 0.85,
+          "justifications": {
+            "severity": "Insolvency shuts down server infrastructure.",
+            "likelihood": "Software development and commercial API billing easily exceed ₹2 Lakhs.",
+            "breadth": "Terminates the entire business.",
+            "irreversibility": "Exhausted capital halts development.",
+            "time_sensitivity": "Needs financial budget reallocation immediately."
+          }
+        },
+        "recommendations": [
+          { "action": "Switch to OpenStreetMap and open-source OSRM routing hosted on existing servers to eliminate map API fees.", "effort": "medium" },
+          { "action": "Increase seed funding budget to at least ₹8,00,000 for realistic 3-month operational runway.", "effort": "high" }
+        ],
+        "questions": [
+          "What is the projected API cost per order on Google Maps Platform?",
+          "How will couriers and developer stipends be covered once cloud costs are deducted?"
+        ]
+      },
+      {
+        "type": "missing_assumption",
+        "title": "Unaddressed Merchant Cold-Start and Off-Peak Menu Availability",
+        "explanation": "The plan assumes cafeteria vendors and local eateries will actively keep inventory synchronized and package meals in 7 minutes. It lacks any incentive model, kitchen printer hardware, or merchant onboarding plan to solve the cold-start supply problem.",
+        "why_it_matters": "Without merchant engagement and automated POS integration, restaurants will reject or ignore orders during campus rushes, leaving hungry students stranded.",
+        "evidence": [
+          {
+            "kind": "text_span",
+            "locator": "offset:2080-2155",
+            "excerpt": "All cafeteria stalls will package orders within 7 minutes of digital receipt",
+            "detail": "Assumes partner stalls have digital receipt equipment and rapid packaging readiness"
+          }
+        ],
+        "sub_scores": {
+          "severity": 0.75,
+          "likelihood": 0.85,
+          "breadth": 0.70,
+          "irreversibility": 0.50,
+          "time_sensitivity": 0.70,
+          "justifications": {
+            "severity": "Merchant rejection ruins order fulfillment.",
+            "likelihood": "University cafeterias prioritize physical walk-in counter queues.",
+            "breadth": "Affects all restaurant partners.",
+            "irreversibility": "Damaged vendor relationships are hard to recover.",
+            "time_sensitivity": "Must be negotiated with campus dining administration."
+          }
+        },
+        "recommendations": [
+          { "action": "Pilot with exactly 2 dedicated high-volume stalls before opening the platform to all University Avenue eateries.", "effort": "low" },
+          { "action": "Provide simple thermal Bluetooth receipt printers to partner stalls for instant order notification.", "effort": "medium" }
+        ],
+        "questions": [
+          "Will cafeteria workers prioritize mobile app orders over long in-person lines during the 1:00 PM lunch rush?",
+          "How are sold-out dishes removed from the app before students place orders?"
+        ]
+      },
+      {
+        "type": "missing_assumption",
+        "title": "Unstated Assumption Regarding Student Smartphone & Network Prerequisites",
+        "explanation": "The PRD assumes seamless student mobile device compatibility and uninterrupted high-speed cellular data. University dorm basements and concrete stairwells are notorious cellular dead zones where continuous telemetry pings fail.",
+        "why_it_matters": "Students in low-connectivity dorm wings will experience failed checkouts, frozen order tracking, and missed courier arrival notifications.",
+        "evidence": [
+          {
+            "kind": "text_span",
+            "locator": "offset:1680-1785",
+            "excerpt": "pinpoint exact dorm stairwells, common rooms, and campus quads",
+            "detail": "Relies on reliable GPS and data connectivity deep inside residential concrete structures"
+          }
+        ],
+        "sub_scores": {
+          "severity": 0.65,
+          "likelihood": 0.80,
+          "breadth": 0.55,
+          "irreversibility": 0.35,
+          "time_sensitivity": 0.60,
+          "justifications": {
+            "severity": "Degrades app usability for dorm residents with weak signal.",
+            "likelihood": "Campus indoor dead zones are well-documented.",
+            "breadth": "Affects residents of older concrete dorm halls.",
+            "irreversibility": "Can be mitigated with offline-tolerant sync and SMS alerts.",
+            "time_sensitivity": "Needs testing during campus field trials."
+          }
+        },
+        "recommendations": [
+          { "action": "Support SMS arrival alerts and fallback campus Wi-Fi authentication.", "effort": "low" },
+          { "action": "Allow couriers to leave packages at designated dorm front desk reception desks when access codes fail.", "effort": "low" }
+        ],
+        "questions": [
+          "How will couriers contact students when cell reception drops inside dormitory corridors?",
+          "Does the app function on campus eduroam / student guest Wi-Fi networks?"
+        ]
+      }
+    ]
+  },
+  "student_performance": {
+    "project_model": {
+      "goals": [
+        {
+          "text": "Predict student academic risk to trigger early counselor interventions.",
+          "source": { "quote": "student performance tracking dataset for predictive academic risk modeling", "start_offset": 0, "end_offset": 75 }
+        }
+      ],
+      "metrics": [
+        {
+          "text": "Identify at-risk students based on prior GPA, attendance, and study habits.",
+          "source": { "quote": "attendance_rate, study_hours_weekly, prior_gpa, midterm_score, is_at_risk", "start_offset": 0, "end_offset": 80 }
+        }
+      ]
+    },
+    "findings": [
+      {
+        "type": "data_risk",
+        "title": "Severe Target Leakage: Feature 'final_result_label_copy'",
+        "explanation": "The dataset contains column 'final_result_label_copy' which is a direct 1-to-1 duplicate of the target outcome label. Including post-outcome labels during training yields 100% artificial accuracy that completely disintegrates in live production.",
+        "why_it_matters": "A machine learning model trained with this feature learns zero true predictive patterns from study hours or GPA, rendering it entirely useless for early student intervention.",
+        "evidence": [
+          {
+            "kind": "column_stat",
+            "locator": "column:final_result_label_copy",
+            "excerpt": "sample_values=['Passing', 'At-Risk'], target_proxy=100%",
+            "detail": "Feature directly mirrors the ground-truth prediction target label"
+          }
+        ],
+        "sub_scores": {
+          "severity": 0.95,
+          "likelihood": 0.95,
+          "breadth": 0.80,
+          "irreversibility": 0.30,
+          "time_sensitivity": 0.85,
+          "justifications": {
+            "severity": "Invalidates all model learning by leaking future target status.",
+            "likelihood": "100% correlation observed in dataset profile.",
+            "breadth": "Dominates all feature importance splits.",
+            "irreversibility": "Easily dropped prior to training.",
+            "time_sensitivity": "Must be removed immediately before model validation."
+          }
+        },
+        "recommendations": [
+          { "action": "Drop 'final_result_label_copy' immediately from the feature training pipeline.", "effort": "low" },
+          { "action": "Add an automated feature correlation audit step in the data ingestion pipeline.", "effort": "low" }
+        ],
+        "questions": [
+          "Why was the post-semester final result label included in the pre-intervention training table?",
+          "Are any other columns derived from post-final grading records?"
+        ]
+      },
+      {
+        "type": "data_risk",
+        "title": "Exposed PII: Plaintext Student Email Addresses in Training Matrix",
+        "explanation": "Column 'student_email' exposes unmasked personal student email addresses across all 1,500 records. Exposing raw personal identifiers violates FERPA and privacy protection statutes.",
+        "why_it_matters": "Retaining raw emails exposes student identities in model artifacts, notebooks, and logs, creating severe compliance breach liability.",
+        "evidence": [
+          {
+            "kind": "column_stat",
+            "locator": "column:student_email",
+            "excerpt": "sample='aarav.sharma1@university.edu', pii_type='email'",
+            "detail": "1,500 plaintext institutional student email addresses found"
+          }
+        ],
+        "sub_scores": {
+          "severity": 0.85,
+          "likelihood": 0.95,
+          "breadth": 0.85,
+          "irreversibility": 0.75,
+          "time_sensitivity": 0.90,
+          "justifications": {
+            "severity": "Direct statutory breach under student privacy regulations.",
+            "likelihood": "Visible across all dataset rows.",
+            "breadth": "Covers 100% of enrolled students in the sample.",
+            "irreversibility": "Shared student emails cannot be retracted once leaked.",
+            "time_sensitivity": "Must be pseudonymized before dataset distribution."
+          }
+        },
+        "recommendations": [
+          { "action": "Hash student emails using HMAC-SHA256 with a secret salt or replace with synthetic student UUIDs.", "effort": "low" },
+          { "action": "Enforce automated PII redaction checks on all incoming analytical tables.", "effort": "medium" }
+        ],
+        "questions": [
+          "Does the university research compliance board approve using unmasked student emails for model training?",
+          "Who possesses access to download this raw dataset?"
+        ]
+      },
+      {
+        "type": "data_risk",
+        "title": "Acute Class Imbalance: Only 6% At-Risk Target Representation",
+        "explanation": "Only 90 out of 1,500 students (6%) are classified as at-risk. A naive baseline model predicting 'passing' for all students achieves 94% accuracy while failing to detect a single vulnerable student.",
+        "why_it_matters": "Academic interventions will fail because standard unweighted classifiers will miss the vast majority of struggling students to optimize global accuracy.",
+        "evidence": [
+          {
+            "kind": "column_stat",
+            "locator": "column:is_at_risk",
+            "excerpt": "minority_pct=6.0%, positive_samples=90/1500",
+            "detail": "Severe positive class rarity in target classification variable"
+          }
+        ],
+        "sub_scores": {
+          "severity": 0.80,
+          "likelihood": 0.90,
+          "breadth": 0.70,
+          "irreversibility": 0.50,
+          "time_sensitivity": 0.75,
+          "justifications": {
+            "severity": "Defeats primary purpose of early intervention model.",
+            "likelihood": "Directly measured from class distribution.",
+            "breadth": "Affects all model evaluation metrics.",
+            "irreversibility": "Can be handled with balanced sampling and cost-sensitive loss.",
+            "time_sensitivity": "Must configure loss functions before model training."
+          }
+        },
+        "recommendations": [
+          { "action": "Employ class-weighted loss penalties (e.g. 15:1 weight on at-risk class) or SMOTE oversampling.", "effort": "low" },
+          { "action": "Optimize for Precision-Recall AUC (PR-AUC) and recall at 80% precision rather than ROC-AUC or accuracy.", "effort": "low" }
+        ],
+        "questions": [
+          "What is the institutional cost of an academic false negative (student drops out unassisted)?",
+          "What is the counselor capacity for reviewing flagged early-warning alerts?"
+        ]
+      },
+      {
+        "type": "data_risk",
+        "title": "High Missingness in Critical Predictor 'attendance_rate' (25%)",
+        "explanation": "Column 'attendance_rate' contains missing values across 25% of the student cohort. Attendance is one of the strongest early indicators of academic difficulty, yet a quarter of records are blank.",
+        "why_it_matters": "Dropping rows with missing attendance discards 375 students, while mean imputation artificially normalizes high-risk truancy behavior.",
+        "evidence": [
+          {
+            "kind": "column_stat",
+            "locator": "column:attendance_rate",
+            "excerpt": "null_pct=25.0%, missing_count=375/1500",
+            "detail": "25% of attendance records omitted entirely"
+          }
+        ],
+        "sub_scores": {
+          "severity": 0.70,
+          "likelihood": 0.85,
+          "breadth": 0.60,
+          "irreversibility": 0.55,
+          "time_sensitivity": 0.70,
+          "justifications": {
+            "severity": "Missing attendance hides one of the strongest predictive signals.",
+            "likelihood": "Directly observed across 375 rows.",
+            "breadth": "Distorts 25% of student predictions.",
+            "irreversibility": "Historical unrecorded attendance cannot be reconstructed.",
+            "time_sensitivity": "Needs smart imputation and logging fix."
+          }
+        },
+        "recommendations": [
+          { "action": "Add an explicit 'attendance_missing' binary indicator feature alongside missing-value imputation.", "effort": "low" },
+          { "action": "Audit classroom card-swipe and LMS login sync mechanisms to resolve systemic logging drops.", "effort": "medium" }
+        ],
+        "questions": [
+          "Is attendance missing at random, or are disengaged students systematically failing to swipe into lectures?",
+          "Are asynchronous online courses responsible for the unrecorded attendance values?"
+        ]
+      },
+      {
+        "type": "data_risk",
+        "title": "Temporal Cohort Bias: Single Semester Data Only ('Fall 2024')",
+        "explanation": "The entire training dataset originates from a single academic semester ('Fall 2024'). The dataset lacks seasonal, curriculum, and instructor variation across academic years.",
+        "why_it_matters": "Models trained on a single semester overfit to idiosyncratic course schedules and grading curves, failing when deployed across subsequent spring or winter semesters.",
+        "evidence": [
+          {
+            "kind": "column_stat",
+            "locator": "column:semester",
+            "excerpt": "unique_count=1, dominant_value='Fall 2024' (100%)",
+            "detail": "100% of training data drawn from single academic term"
+          }
+        ],
+        "sub_scores": {
+          "severity": 0.70,
+          "likelihood": 0.80,
+          "breadth": 0.85,
+          "irreversibility": 0.60,
+          "time_sensitivity": 0.65,
+          "justifications": {
+            "severity": "Model cannot generalize to subsequent academic years or semesters.",
+            "likelihood": "Zero temporal variance present in training set.",
+            "breadth": "Affects all future predictions outside Fall 2024.",
+            "irreversibility": "Requires collecting multi-year historic archives.",
+            "time_sensitivity": "Important before institutional rollout."
+          }
+        },
+        "recommendations": [
+          { "action": "Incorporate historical student records from at least 4 past semesters (Fall and Spring).", "effort": "high" },
+          { "action": "Perform out-of-time temporal validation on Spring 2025 data before deploying predictions.", "effort": "medium" }
+        ],
+        "questions": [
+          "How significantly do course difficulty and student dropout rates vary between Fall and Spring terms?",
+          "Did any specific campus events or policy changes occur during Fall 2024 that distorted grades?"
+        ]
+      }
+    ]
+  },
+  "order_fulfillment": {
+    "project_model": {
+      "goals": [
+        {
+          "text": "Automate end-to-end e-commerce order fulfillment from receipt to delivery.",
+          "source": { "quote": "End-to-end processing pipeline from order placement to customer delivery", "start_offset": 0, "end_offset": 70 }
+        }
+      ]
+    },
+    "findings": [
+      {
+        "type": "workflow_risk",
+        "title": "Unassigned Step: 'Generate Pick List' Lacks Designated Owner",
+        "explanation": "Workflow step 'step_4' ('Generate Pick List') has no assigned human owner or automated service (owner is null). When automated PDF generation fails or warehouse printers encounter paper jams, no service or operator is notified.",
+        "why_it_matters": "Orders entering step 4 will silently hang indefinitely during printer errors, halting downstream pick, pack, and shipment.",
+        "evidence": [
+          {
+            "kind": "node",
+            "locator": "node:step_4",
+            "excerpt": "node='Generate Pick List', owner=null",
+            "detail": "Workflow node step_4 has no assigned operator or microservice owner"
+          }
+        ],
+        "sub_scores": {
+          "severity": 0.70,
+          "likelihood": 0.85,
+          "breadth": 0.55,
+          "irreversibility": 0.30,
+          "time_sensitivity": 0.75,
+          "justifications": {
+            "severity": "Causes silent order stalls in warehouse queue.",
+            "likelihood": "Directly null in workflow definition.",
+            "breadth": "Blocks the entire downstream pipeline for affected orders.",
+            "irreversibility": "Easily fixed with role assignment.",
+            "time_sensitivity": "Must be assigned prior to production execution."
+          }
+        },
+        "recommendations": [
+          { "action": "Assign step_4 to 'warehouse_print_service' with automated fallback to the warehouse lead.", "effort": "low" },
+          { "action": "Implement a 10-minute SLA timeout alert on step 4 to catch stalled pick lists.", "effort": "low" }
+        ],
+        "questions": [
+          "Who resolves pick list printing failures when the automated queue stalls?",
+          "Should pick lists be digital on ruggedized warehouse handheld tablets instead of printed paper?"
+        ]
+      },
+      {
+        "type": "workflow_risk",
+        "title": "Missing Payment Failure and Rollback Path on 'Authorize Payment'",
+        "explanation": "Step 2 ('Authorize Payment') only contains a forward transition ('payment_approved') leading directly to inventory allocation. There is zero transition branch for declined cards, fraud triggers, or gateway timeouts.",
+        "why_it_matters": "Payment declines will either cause unhandled runtime exceptions that drop orders without customer notification, or risk leaking inventory on unpaid purchases.",
+        "evidence": [
+          {
+            "kind": "node",
+            "locator": "node:step_2",
+            "excerpt": "node='Authorize Payment', outgoing_edges=[condition='payment_approved']",
+            "detail": "Zero rollback or error branch on payment capture step"
+          }
+        ],
+        "sub_scores": {
+          "severity": 0.85,
+          "likelihood": 0.80,
+          "breadth": 0.70,
+          "irreversibility": 0.80,
+          "time_sensitivity": 0.85,
+          "justifications": {
+            "severity": "Leads to unhandled financial state and lost merchandise.",
+            "likelihood": "Payment declines happen in 3-5% of e-commerce checkouts.",
+            "breadth": "Affects all declined or timed-out orders.",
+            "irreversibility": "Requires manual accounting and database intervention.",
+            "time_sensitivity": "Critical flaw requiring immediate edge correction."
+          }
+        },
+        "recommendations": [
+          { "action": "Add edge from step_2 with condition 'payment_declined' leading to 'Notify Customer & Release Cart'.", "effort": "low" },
+          { "action": "Introduce automatic exponential backoff retry for network gateway timeouts.", "effort": "medium" }
+        ],
+        "questions": [
+          "How does the customer learn that their card was declined?",
+          "How is allocated inventory unreserved when payment gateway webhooks report fraud?"
+        ]
+      },
+      {
+        "type": "workflow_risk",
+        "title": "Single Point of Failure: 'john_warehouse_operator' Controls Pack & Dispatch",
+        "explanation": "Operator 'john_warehouse_operator' is assigned to both Step 5 ('Item Pick & Pack') and Step 6 ('Physical Dispatch & Carrier Handover'). Concentrating both packing and trailer loading in a single individual violates segregation of duties.",
+        "why_it_matters": "A single operator can pack incorrect SKUs, omit packing slips, or misroute packages onto outgoing commercial trailers without independent double-check.",
+        "evidence": [
+          {
+            "kind": "node",
+            "locator": "node:step_5",
+            "excerpt": "owner='john_warehouse_operator', steps=['step_5', 'step_6']",
+            "detail": "Single human operator assigned to consecutive pick, pack, and carrier handover nodes"
+          }
+        ],
+        "sub_scores": {
+          "severity": 0.75,
+          "likelihood": 0.70,
+          "breadth": 0.60,
+          "irreversibility": 0.65,
+          "time_sensitivity": 0.60,
+          "justifications": {
+            "severity": "Breach of internal chain-of-custody controls and dispatch auditability.",
+            "likelihood": "Human fatigue and single-operator bottlenecks occur daily.",
+            "breadth": "Impairs warehouse throughput whenever this operator is absent.",
+            "irreversibility": "Dispatched incorrect cartons incur expensive reverse logistics.",
+            "time_sensitivity": "Needs separation prior to fulfillment volume expansion."
+          }
+        },
+        "recommendations": [
+          { "action": "Segregate packing and trailer loading between distinct warehouse operators.", "effort": "low" },
+          { "action": "Require a secondary barcode dispatch scan at the trailer door by logistics lead.", "effort": "low" }
+        ],
+        "questions": [
+          "Who audits carton contents before 'john_warehouse_operator' loads them onto the 3PL trailer?",
+          "What is the operational continuity plan when this operator takes sick leave?"
+        ]
+      },
+      {
+        "type": "workflow_risk",
+        "title": "Irreversible Carrier Dispatch Lacks Prior Quality or Approval Gate",
+        "explanation": "Step 6 ('Physical Dispatch & Carrier Handover') is an irreversible physical step with no preceding quality inspection, weight check, or supervisor sign-off. Once cartons are loaded onto outgoing trailers, transit cannot be recalled without freight penalties.",
+        "why_it_matters": "Damaged goods, wrong item variants, or orders cancelled while in packing will physically exit the facility without any verification intercept.",
+        "evidence": [
+          {
+            "kind": "node",
+            "locator": "node:step_6",
+            "excerpt": "node='Physical Dispatch & Carrier Handover', reversible=false, predecessors=['step_5']",
+            "detail": "Irreversible trailer handover executed without approval or QC step"
+          }
+        ],
+        "sub_scores": {
+          "severity": 0.80,
+          "likelihood": 0.75,
+          "breadth": 0.50,
+          "irreversibility": 0.90,
+          "time_sensitivity": 0.70,
+          "justifications": {
+            "severity": "Physical trailer loading is permanent once trailer departs.",
+            "likelihood": "Mispacks routinely occur without double-check gates.",
+            "breadth": "Affects all outgoing shipments.",
+            "irreversibility": "Extremely high: commercial transit cannot be undone easily.",
+            "time_sensitivity": "Needs gate insertion before shipping live parcels."
+          }
+        },
+        "recommendations": [
+          { "action": "Insert an automated scale check step comparing packaged carton weight against SKU bill-of-materials.", "effort": "medium" },
+          { "action": "Poll the order cancellation queue one final time prior to trailer scanning.", "effort": "low" }
+        ],
+        "questions": [
+          "If a customer cancels their order while the carton is on the staging table, can it be stopped before trailer loading?",
+          "Is carton tare weight verified against expected item weights?"
+        ]
+      }
+    ]
+  }
+}
